@@ -93,6 +93,7 @@ async def listpeople(ctx):
 @tree.command(name="toptracks", description="show the top tracks of the user for the month")
 async def toptracks(ctx):
     session = SessionLocal()
+    print(ctx.user.id)
     user = session.query(UserToken).filter(UserToken.user_id == str(ctx.user.id)).first()
     session.close()
     if user is None:
