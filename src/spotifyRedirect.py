@@ -29,7 +29,7 @@ def callback():
     session = SessionLocal()
     code = request.args.get('code')
     user_id = request.args.get('state')
-    token_info = sp_oauth.get_access_token(code)
+    token_info = sp_oauth.get_access_token(code, check_cache=False)
     
     
     # Add user to database
