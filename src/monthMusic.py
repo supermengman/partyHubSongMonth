@@ -71,7 +71,7 @@ async def login(ctx):
     user = session.query(UserToken).filter(UserToken.user_id == str(ctx.user.id)).first()
     session.close()
     if user:
-        await ctx.response.send_message(f"You have already connected your spotify account to the bot. If you want to reconnect, click this link: {auth_url}")
+        await ctx.response.send_message(f"You have already connected your spotify account to the bot. If you want to reconnect, click this link: {auth_url}", ephemeral=True)
         return
     
     await ctx.response.send_message(f'Please login to Spotify: {auth_url}', ephemeral=True)
