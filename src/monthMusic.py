@@ -64,7 +64,7 @@ async def on_ready():
 @tree.command(name="login", description="connect your spotify account to the bot")
 async def login(ctx):
     
-    auth_url = sp_oauth.get_authorize_url(state=str(ctx.user.id))
+    auth_url = sp_oauth.get_authorize_url(state=str(ctx.user.id), check_cache=False)
 
     # check if user already exists in database
     session = SessionLocal()
