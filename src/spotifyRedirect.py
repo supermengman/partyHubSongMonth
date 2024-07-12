@@ -53,4 +53,4 @@ def callback():
         return "Success"
 
 if __name__ == "__main__":
-    app.run(port=8888, debug=True, host='0.0.0.0')
+    app.run(port=8888, debug=True, host='192.168.1.99')
