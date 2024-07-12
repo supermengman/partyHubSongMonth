@@ -31,26 +31,13 @@ def callback():
     user_id = request.args.get('state')
     token_info = sp_oauth.get_access_token(code)
     
-    # Check if user already exists in database
-    user = session.query(UserToken).filter(UserToken.user_id == user_id).first()
-    if user:
-        print("User already exists")
-        # Update user's token
-        user.access_token = token_info['access_token']
-        user.refresh_token = token_info['refresh_token']
-        user.token_type = token_info['token_type']
-        user.expires_in = token_info['expires_in']
-        user.scope = token_info['scope']
-        session.commit()
-        session.close()
-        return "Success"
-    else:
-        # Add user to database
-        user_token = UserToken(user_id=user_id, access_token=token_info['access_token'], refresh_token=token_info['refresh_token'], token_type=token_info['token_type'], expires_in=token_info['expires_in'], scope=token_info['scope'])
-        session.add(user_token)
-        session.commit()
-        session.close()
-        return "Success"
+    
+    # Add user to database
+    user_token = UserToken(user_id=user_id, access_token=token_info['access_token'], refresh_token=token_info['refresh_token'], token_type=token_info['token_type'], expires_in=token_info['expires_in'], scope=token_info['scope'])
+    session.add(user_token)
+    session.commit()
+    session.close()
+    return "Success"
 
 if __name__ == "__main__":
     app.run(port=8888, debug=True, host='192.168.1.99')
