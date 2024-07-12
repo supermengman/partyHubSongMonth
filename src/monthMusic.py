@@ -95,7 +95,7 @@ async def toptracks(ctx):
     session = SessionLocal()
     print(ctx.user.id)
     user = session.query(UserToken).filter(UserToken.user_id == str(ctx.user.id)).first()
-    print(user)
+    print(user.access_token)
     session.close()
     if user is None:
         await ctx.response.send_message("You have not connected your spotify account to the bot", ephemeral=True)
