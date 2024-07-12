@@ -18,7 +18,7 @@ scope = 'user-top-read playlist-modify-public'
 
 app = Flask(__name__)
 
-sp_oauth = SpotifyOAuth(SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REDIRECT_URI, scope=scope)
+sp_oauth = SpotifyOAuth(SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REDIRECT_URI, scope=scope, cache_path=None)
 
 @app.route("/")
 def index():

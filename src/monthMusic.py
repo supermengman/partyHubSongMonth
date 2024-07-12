@@ -74,7 +74,7 @@ async def login(ctx):
         await ctx.response.send_message(f"You have already connected your spotify account to the bot. If you want to reconnect, click this link: {auth_url}", ephemeral=True)
         return
     
-    await ctx.response.send_message(f'Please login to Spotify: {auth_url}', ephemeral=True)
+    await ctx.response.send_message(f'Please fill out this google form: https://forms.gle/9fd2gdK2WWU4xdN97, then please login to Spotify: {auth_url}', ephemeral=True)
     
 @tree.command(name="listpeople", description="show the list of people who have connected their spotify account to the bot")
 async def listpeople(ctx):
