@@ -33,7 +33,7 @@ def callback():
     
     
     # Add user to database
-    user_token = UserToken(user_id=user_id, access_token=token_info['access_token'], refresh_token=token_info['refresh_token'], token_type=token_info['token_type'], expires_in=token_info['expires_in'], scope=token_info['scope'])
+    user_token = UserToken(user_id=user_id, access_token=token_info['access_token'], refresh_token=token_info['refresh_token'], token_type=token_info['token_type'], expires_in=token_info['expires_in'], scope=token_info['scope'], expires_at=token_info['expires_at'])
     session.add(user_token)
     session.commit()
     session.close()

@@ -17,6 +17,7 @@ class UserToken(Base):
     token_type = Column(String)
     expires_in = Column(String)
     scope = Column(String)
+    expires_at = Column(String)
 
 def init_db():
     Base.metadata.create_all(bind=engine)

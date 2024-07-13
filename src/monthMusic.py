@@ -59,7 +59,7 @@ sp_oauth = SpotifyOAuth(SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REDIRE
 @bot.event
 async def on_ready():
     logger.info(f'Logged in as {bot.user.name}')
-    
+
     
 @tree.command(name="login", description="connect your spotify account to the bot")
 async def login(ctx):
@@ -89,13 +89,22 @@ async def listpeople(ctx):
             username = await bot.fetch_user(int(user.user_id))
             user_list += f"{username}\n"
         await ctx.response.send_message(user_list)
-        
+   
+         
 @tree.command(name="toptracks", description="show the top tracks of the user for the month")
 async def toptracks(ctx):
     session = SessionLocal()
     print(ctx.user.id)
     user = session.query(UserToken).filter(UserToken.user_id == str(ctx.user.id)).first()
-    print(user.access_token)
+    # update access token if it has expired, expires_at is in unix time
+    if int(user.expires_at) < int(t.time()):
+        print("refreshing token")
+        token_info = sp_oauth.refresh_access_token(user.refresh_token, check_cache=False)
+        user.access_token = token_info['access_token']
+        print(user.access_token)
+        user.expires_at = token_info['expires_at']
+        session.commit()
+            
     session.close()
     if user is None:
         await ctx.response.send_message("You have not connected your spotify account to the bot", ephemeral=True)
