@@ -99,7 +99,7 @@ async def toptracks(ctx):
     # update access token if it has expired, expires_at is in unix time
     if int(user.expires_at) < int(t.time()):
         print("refreshing token")
-        token_info = sp_oauth.refresh_access_token(user.refresh_token, check_cache=False)
+        token_info = sp_oauth.refresh_access_token(user.refresh_token)
         user.access_token = token_info['access_token']
         print(user.access_token)
         user.expires_at = token_info['expires_at']
