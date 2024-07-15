@@ -105,7 +105,6 @@ async def toptracks(ctx):
         user.expires_at = token_info['expires_at']
         session.commit()
             
-    session.close()
     if user is None:
         await ctx.response.send_message("You have not connected your spotify account to the bot", ephemeral=True)
     else:
@@ -115,6 +114,9 @@ async def toptracks(ctx):
         for track in top_tracks['items']:
             track_list += f"{track['name']} by {track['artists'][0]['name']}\n"
         await ctx.response.send_message(track_list)
+    
+    session.close()
+
 
 # EXECUTES THE BOT WITH THE SPECIFIED TOKEN. DON'T REMOVE THIS LINE OF CODE JUST CHANGE THE "DISCORD_TOKEN" PART TO YOUR DISCORD BOT TOKEN
 bot.run(DISCORD_TOKEN)
