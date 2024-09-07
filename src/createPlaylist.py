@@ -23,22 +23,23 @@ sp_oauth = SpotifyOAuth(SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REDIRE
 def get_top_five_tracks():
     session = SessionLocal()
     users = session.query(UserToken).all()
-    print(users)
+
     
-    # for user in users:
-    #     # if neccessary, refresh token
-    #     if int(user.expires_at) < int(t.time()):
-    #         token_info = sp_oauth.refresh_access_token(user.refresh_token)
-    #         user.access_token = token_info['access_token']
-    #         print(user.access_token)
-    #         user.expires_at = token_info['expires_at']
-    #         session.commit()
+    for user in users:
         
-    #     sp = spotipy.Spotify(auth=user.access_token)
-    #     results = sp.current_user_top_tracks(limit=5, time_range='short_term')
-    #     print('Top 5 tracks for user', sp.current_user()['display_name'])
-    #     for idx, item in enumerate(results['items']):
-    #         print(idx, item['name'], '//', item['artists'][0]['name'])
+        # if neccessary, refresh token
+        if int(user.expires_at) < int(t.time()):
+            token_info = sp_oauth.refresh_access_token(user.refresh_token)
+            user.access_token = token_info['access_token']
+            print(user.access_token)
+            user.expires_at = token_info['expires_at']
+            session.commit()
+        
+        sp = spotipy.Spotify(auth=user.access_token)
+        results = sp.current_user_top_tracks(limit=5, time_range='short_term')
+        print('Top 5 tracks for user', sp.current_user()['display_name'])
+        for idx, item in enumerate(results['items']):
+            print(idx, item['name'], '//', item['artists'][0]['name'])
     session.close()
 
 get_top_five_tracks()
