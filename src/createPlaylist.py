@@ -90,6 +90,10 @@ def create_playlist():
     playlist = sp.user_playlist_create(user_id, previous_month_name, public=True)
     sp.playlist_add_items(playlist['id'], all_song_ids)
     
+    # print the link to the playlist
+    print('Playlist link:', playlist['external_urls']['spotify'])
+    
     print('Playlist created successfully')
+    session.close()
 
-get_top_five_tracks()
+create_playlist()
