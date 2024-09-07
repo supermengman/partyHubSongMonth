@@ -59,7 +59,6 @@ sp_oauth = SpotifyOAuth(SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REDIRE
 @bot.event
 async def on_ready():
     logger.info(f'Logged in as {bot.user.name}')
-    await tree.sync()
 
     
 @tree.command(name="login", description="connect your spotify account to the bot")
