@@ -40,3 +40,5 @@ def get_top_five_tracks():
     #     for idx, item in enumerate(results['items']):
     #         print(idx, item['name'], '//', item['artists'][0]['name'])
     session.close()
+
+get_top_five_tracks()
