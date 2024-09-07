@@ -38,6 +38,8 @@ def get_top_five_tracks():
             session.commit()
         
         sp = spotipy.Spotify(auth=user.access_token)
+        print(sp.current_user())
+        
         results = sp.current_user_top_tracks(limit=5, time_range='short_term')
         print('Top 5 tracks for user', sp.current_user()['display_name'])
         for idx, item in enumerate(results['items']):
