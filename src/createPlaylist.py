@@ -7,6 +7,7 @@ import time as t
 from dotenv import load_dotenv
 
 from database import SessionLocal, UserToken
+import datetime
 
 
 # LOADS THE .ENV FILE THAT RESIDES ON THE SAME LEVEL AS THE SCRIPT.
@@ -73,8 +74,21 @@ def create_playlist():
     # get user id in spotify
     user_id = sp.current_user()['id']
     
+    # get the current date
+    current_date = datetime.date.today()
+    
+    # get the first day of the current month
+    first_day_of_current_month = current_date.replace(day=1)
+    
+    # get the last day of the previous month
+    last_day_of_previous_month = first_day_of_current_month - datetime.timedelta(days=1)
+    
+    # get the name of the previous month
+    previous_month_name = last_day_of_previous_month.strftime('%B')
+    
     # create playlist
-    playlist = sp.user_playlist_create(user_id, 'Top 5 Tracks of the Month', public=True)
+    playlist = sp.user_playlist_create(user_id, previous_month_name, public=True)
+    sp.playlist_add_items(playlist['id'], all_song_ids)
     
     print('Playlist created successfully')
 
