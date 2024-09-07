@@ -38,10 +38,13 @@ def get_top_five_tracks():
             session.commit()
         
         sp = spotipy.Spotify(auth=user.access_token)
-        print(sp.current_user())
         
-        results = sp.current_user_top_tracks(limit=5, time_range='short_term')
-        print('Top 5 tracks for user', sp.current_user()['display_name'])
+        try:
+            results = sp.current_user_top_tracks(limit=5, time_range='short_term')
+            print('Top 5 tracks for user', sp.current_user()['display_name'])
+        except spotipy.SpotifyException as e:
+            print('An error occurred:', e)
+            
         for idx, item in enumerate(results['items']):
             print(idx, item['name'], '//', item['artists'][0]['name'])
     session.close()
