@@ -59,6 +59,7 @@ sp_oauth = SpotifyOAuth(SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REDIRE
 @bot.event
 async def on_ready():
     logger.info(f'Logged in as {bot.user.name}')
+    await tree.sync()
 
     
 @tree.command(name="login", description="connect your spotify account to the bot")
@@ -121,16 +122,27 @@ async def toptracks(ctx):
 @tree.command(name="listplaylists", description="show the list of monthly playlists created")
 async def listplaylists(ctx):
     session = SessionLocal()
-    users = session.query(UserToken).all()
+    user = session.query(UserToken).filter(UserToken.user_id == '999571176923861092').first()
+    # if neccessary, refresh token
+    if int(user.expires_at) < int(t.time()):
+        token_info = sp_oauth.refresh_access_token(user.refresh_token)
+        user.access_token = token_info['access_token']
+        user.expires_at = token_info['expires_at']
+        session.commit()
+        
+    sp = spotipy.Spotify(auth=user.access_token)
+    
+    # get all playlists made by user
+    playlists = sp.current_user_playlists()
+    
+    # output with link to playlist
+    playlist_list = ""
+    for playlist in playlists['items']:
+        playlist_list += f"{playlist['name']} - {playlist['external_urls']['spotify']}\n"
+    
+    await ctx.response.send_message(playlist_list)
+    
     session.close()
-    if len(users) == 0:
-        await ctx.response.send_message("No playlists have been created")
-    else:
-        playlist_list = ""
-        for user in users:
-            username = await bot.fetch_user(int(user.user_id))
-            playlist_list += f"{username}\n"
-        await ctx.response.send_message(playlist_list)
 
 # EXECUTES THE BOT WITH THE SPECIFIED TOKEN. DON'T REMOVE THIS LINE OF CODE JUST CHANGE THE "DISCORD_TOKEN" PART TO YOUR DISCORD BOT TOKEN
 bot.run(DISCORD_TOKEN)
