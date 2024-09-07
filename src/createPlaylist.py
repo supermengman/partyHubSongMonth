@@ -22,6 +22,9 @@ sp_oauth = SpotifyOAuth(SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REDIRE
 
 # get top five tracks from all users
 def get_top_five_tracks():
+    
+    all_song_ids = []
+    
     session = SessionLocal()
     users = session.query(UserToken).all()
 
@@ -33,7 +36,6 @@ def get_top_five_tracks():
         if int(user.expires_at) < int(t.time()):
             token_info = sp_oauth.refresh_access_token(user.refresh_token)
             user.access_token = token_info['access_token']
-            print(user.access_token)
             user.expires_at = token_info['expires_at']
             session.commit()
         
@@ -47,7 +49,33 @@ def get_top_five_tracks():
             continue
             
         for idx, item in enumerate(results['items']):
-            print(idx, item['name'], '//', item['artists'][0]['name'])
+            print(idx+1, item['name'], '//', item['artists'][0]['name'])
+            # add song id to list
+            all_song_ids.append(item['id'])
+            
     session.close()
+    return all_song_ids
+
+def create_playlist():
+    all_song_ids = get_top_five_tracks()
+    
+    session = SessionLocal()
+    user = session.query(UserToken).filter(UserToken.user_id == '999571176923861092').first()
+    # if neccessary, refresh token
+    if int(user.expires_at) < int(t.time()):
+        token_info = sp_oauth.refresh_access_token(user.refresh_token)
+        user.access_token = token_info['access_token']
+        user.expires_at = token_info['expires_at']
+        session.commit()
+        
+    sp = spotipy.Spotify(auth=user.access_token)
+    
+    # get user id in spotify
+    user_id = sp.current_user()['id']
+    
+    # create playlist
+    playlist = sp.user_playlist_create(user_id, 'Top 5 Tracks of the Month', public=True)
+    
+    print('Playlist created successfully')
 
 get_top_five_tracks()
