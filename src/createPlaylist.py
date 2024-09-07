@@ -1,6 +1,7 @@
 import os
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
+import time as t
 
 # IMPORT LOAD_DOTENV FUNCTION FROM DOTENV MODULE.
 from dotenv import load_dotenv
