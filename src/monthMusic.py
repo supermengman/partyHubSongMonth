@@ -118,5 +118,19 @@ async def toptracks(ctx):
     session.close()
 
 
+@tree.command(name="listplaylists", description="show the list of monthly playlists created")
+async def listplaylists(ctx):
+    session = SessionLocal()
+    users = session.query(UserToken).all()
+    session.close()
+    if len(users) == 0:
+        await ctx.response.send_message("No playlists have been created")
+    else:
+        playlist_list = ""
+        for user in users:
+            username = await bot.fetch_user(int(user.user_id))
+            playlist_list += f"{username}\n"
+        await ctx.response.send_message(playlist_list)
+
 # EXECUTES THE BOT WITH THE SPECIFIED TOKEN. DON'T REMOVE THIS LINE OF CODE JUST CHANGE THE "DISCORD_TOKEN" PART TO YOUR DISCORD BOT TOKEN
 bot.run(DISCORD_TOKEN)
