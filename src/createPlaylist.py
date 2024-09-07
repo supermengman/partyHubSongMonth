@@ -44,6 +44,7 @@ def get_top_five_tracks():
             print('Top 5 tracks for user', sp.current_user()['display_name'])
         except spotipy.SpotifyException as e:
             print('An error occurred:', e)
+            continue
             
         for idx, item in enumerate(results['items']):
             print(idx, item['name'], '//', item['artists'][0]['name'])
