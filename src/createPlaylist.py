@@ -27,7 +27,8 @@ def get_top_five_tracks():
 
     
     for user in users:
-        
+        if user.user_id = '999571176923861092':
+            continue
         # if neccessary, refresh token
         if int(user.expires_at) < int(t.time()):
             token_info = sp_oauth.refresh_access_token(user.refresh_token)
